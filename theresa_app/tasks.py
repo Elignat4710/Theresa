@@ -4,13 +4,6 @@ from .models import Product
 
 @app.task
 def save_product(items):
-    for item in items:
-        Product.objects.create(
-            url=item['url'],
-            title=item['title'],
-            price=item['price'],
-            images=item['images'],
-            description=item['description'],
-            sizes=item['sizes'],
-            category=item['category'],
-        )
+    Product.objects.bulk_create(
+        [Product(**item) for item in items]
+    )
