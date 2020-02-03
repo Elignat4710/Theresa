@@ -7,7 +7,9 @@ class TheresaSpider(RedisSpider):
     name = 'theresa'
 
     def parse(self, response):
-        for p in range(1, 3):
+        url_last_page = response.xpath('//div[contains(@class, "pages")]/ul//li[contains(@class, "last")]/a/@href').extract()[-1]
+        number_last_page = int(url_last_page.split('=')[-1])
+        for p in range(1, number_last_page + 1 ):
             page = response.url + '?p=' + str(p)
             yield scrapy.Request(url=page, callback=self.parse_page)
 
